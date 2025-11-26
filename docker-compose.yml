@@ -1,0 +1,16 @@
+services:
+  yuumi_db:
+    image: postgres:15
+    container_name: yuumi_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: yuumi
+    ports:
+      - "5433:5432"
+    volumes:
+      - yuumi_data:/var/lib/postgresql/data
+
+volumes:
+  yuumi_data:
