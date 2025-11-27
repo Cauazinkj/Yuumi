@@ -31,3 +31,24 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
+---
+
+### Fluxo correto:
+
+Subir containers:
+
+```
+docker-compose up -d
+```
+
+Criar migration:
+
+```
+docker-compose exec yuumi_backend alembic revision --autogenerate -m "create tables"
+```
+
+Aplicar migration:
+
+```
+docker-compose exec yuumi_backend alembic upgrade head
+```
