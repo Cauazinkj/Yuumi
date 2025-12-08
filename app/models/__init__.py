@@ -1,4 +1,3 @@
-from app.models.base import Base
 from app.models.user import User
 from app.models.recipes import Recipe
 from app.models.recipe_steps import RecipeStep

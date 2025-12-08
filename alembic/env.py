@@ -21,7 +21,7 @@ sys.path.append(BASE_DIR)
 # -------------------------
 # IMPORTS APÓS AJUSTAR PATH
 # -------------------------
-from app.models.base import Base
+from app.db.base import Base
 
 from app.models import user, recipes, recipe_steps, recipe_ingredient
 # Importar é suficiente para registrar no Base.metadata
