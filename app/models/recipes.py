@@ -1,0 +1,16 @@
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from app.models.base import Base
+
+class Recipe(Base):
+    __tablename__ = "recipes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(String)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("User", back_populates="recipes")
+
+    steps = relationship("RecipeStep", back_populates="recipe")
+    ingredients = relationship("RecipeIngredient", back_populates="recipe")

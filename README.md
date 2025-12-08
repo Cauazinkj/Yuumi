@@ -52,3 +52,12 @@ Aplicar migration:
 ```
 docker-compose exec yuumi_backend alembic upgrade head
 ```
+
+Comandos importantes:
+
+```
+docker compose exec yuumi_db bash
+docker compose exec yuumi_backend bash
+```
+
+Serve para acessar o container do banco de dados e do backend, respectivamente.
