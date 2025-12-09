@@ -1,7 +1,6 @@
 from fastapi import APIRouter
+from app.api.v1.user_router import router as user_router
 
 router = APIRouter()
 
-@router.get("/ping")
-def ping():
-    return {"status": "alive"}
+router.include_router(user_router)
