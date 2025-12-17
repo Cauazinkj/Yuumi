@@ -1,18 +1,17 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, field_validator, constr
 
 class UserCreateSchema(BaseModel):
     name: str
     email: EmailStr
-    password: str
+    password: constr(min_length=8, max_length=32)
 
     @field_validator("password")
     def validate_password(cls, v):
-        
         if len(v) < 8:
             raise ValueError("A senha deve ter pelo menos 8 caracteres")
         
         if len(v) > 32:
-            raise ValueError("A senha deve ter no maximo 32 caracteres.")
+            raise ValueError("A senha deve ter no máximo 32 caracteres.")
         
         if not any(c.isupper() for c in v):
             raise ValueError("A senha deve conter pelo menos uma letra maiúscula.")

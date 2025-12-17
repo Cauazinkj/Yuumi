@@ -29,6 +29,7 @@ Criar ambiente virtual:
 ```
 python3 -m venv .venv
 source .venv/bin/activate
+source /home/caua/Yuumi/backend/.venv/bin/activate
 ```
 
 ---
@@ -38,6 +39,7 @@ source .venv/bin/activate
 Subir containers:
 
 ```
+docker-compose build
 docker-compose up -d
 ```
 
@@ -61,3 +63,13 @@ docker compose exec yuumi_backend bash
 ```
 
 Serve para acessar o container do banco de dados e do backend, respectivamente.
+
+### Para verificar dentro do db:
+
+```
+docker-compose exec yuumi_db psql -U postgres -d yuumi
+\dt
+
+SELECT * FROM users; (ou outra requisicao, por exemplo)
+```
+

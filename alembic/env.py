@@ -18,15 +18,8 @@ if config.config_file_name is not None:
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.append(BASE_DIR)
 
-# -------------------------
-# IMPORTS APÓS AJUSTAR PATH
-# -------------------------
-from app.db.base import Base
-
-from app.models import user, recipes, recipe_steps, recipe_ingredient
-# Importar é suficiente para registrar no Base.metadata
-
-target_metadata = Base.metadata
+print(f"BASE_DIR: {BASE_DIR}")
+print(f"Current working directory: {os.getcwd()}")
 
 # -------------------------
 # DATABASE_URL DO .env
@@ -35,8 +28,40 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+print(f"DATABASE_URL: {DATABASE_URL}")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL não encontrada no arquivo .env")
+
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
+# -------------------------
+# IMPORTS APÓS AJUSTAR PATH E DATABASE_URL
+# -------------------------
+try:
+    from app.db.base import Base
+    
+    # Importar todos os modelos para que sejam registrados no Base.metadata
+    from app.models.user import User
+    from app.models.recipes import Recipe
+    from app.models.recipe_steps import RecipeStep
+    from app.models.recipe_ingredient import RecipeIngredient
+    
+    print("Modelos importados com sucesso:")
+    print(f"- User: {'✓' if 'users' in Base.metadata.tables else '✗'}")
+    print(f"- Recipe: {'✓' if 'recipes' in Base.metadata.tables else '✗'}")
+    print(f"- RecipeStep: {'✓' if 'recipe_steps' in Base.metadata.tables else '✗'}")
+    print(f"- RecipeIngredient: {'✓' if 'recipe_ingredients' in Base.metadata.tables else '✗'}")
+    
+    target_metadata = Base.metadata
+    print("Metadata configurada com sucesso")
+    
+except ImportError as e:
+    print(f"ERRO ao importar modelos: {e}")
+    print("Traceback completo:")
+    import traceback
+    traceback.print_exc()
+    raise
 
 # -------------------------
 # MIGRAÇÃO OFFLINE
