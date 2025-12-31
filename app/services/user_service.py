@@ -47,3 +47,39 @@ class UserService:
             logger.error(f"Erro ao criar usuário: {str(e)}", exc_info=True)
             db.rollback()
             raise
+
+    @staticmethod
+    def delete_user(db: Session, user_id: int) -> None:
+
+        try:
+            logger.info(f"Buscando usuario com id {user_id} para exclusao...")
+            user = db.query(User).filter(User.id == user_id).first()
+
+            if not user:
+                logger.warning(f"Usuario com id {user_id} nao encontrado para exclusao.")
+
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"User with ID {user_id} not found."
+                )
+            
+            # Adiciono aqui mais verificações se necessário, como dependências ou relacionamentos
+
+            logger.info(f"✅ Usuário encontrado: {user.name} ({user.email})")
+
+            db.delete(user)
+            logger.info(f"Marcado para deleção, fazendo commit...")
+
+            db.commit()
+            logger.info(f"Usuário ID {user_id} deletado com sucesso!")
+
+        except Exception as e:
+            logger.error(f"Erro ao deletar usuario com ID {user_id}: {str(e)}", exc_info=True)
+            db.rollback()
+
+            if not isinstance(e, HTTPException):
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Erro interno ao deletar usuario com ID {user_id}"
+                )
+            raise e

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
@@ -11,3 +11,8 @@ router = APIRouter(prefix="/users", tags=["Users"])
 def create_user(data: UserCreateSchema, db: Session = Depends(get_db)):
     user = UserService.create_user(db, data)
     return user
+
+@router.delete("/{user_id}", status_code=204)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    UserService.delete_user(db, user_id)
+    return None
