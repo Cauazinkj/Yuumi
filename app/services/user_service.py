@@ -83,3 +83,61 @@ class UserService:
                     detail=f"Erro interno ao deletar usuario com ID {user_id}"
                 )
             raise e
+
+        except Exception as e:
+            logger.error(f"Erro ao deletar usuario com ID {user_id}: {str(e)}", exc_info=True)
+            db.rollback()
+
+            if not isinstance(e, HTTPException):
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Erro interno ao deletar usuario com ID {user_id}"
+                )
+            raise e
+        
+    @staticmethod
+    def get_user(db: Session, skip: int = 0, limit: int = 100) -> list[UserReadSchema]:
+        
+        try: 
+            logger.info(f"Listando usuarios (skip={skip}, limit={limit})")
+
+            users = db.query(User).offset(skip).limit(limit).all()
+            logger.info(f"✅ Encontrados {len(users)} usuário(s)")
+
+            return [UserReadSchema.model_validate(user) for user in users]
+        
+        except Exception as e:
+            logger.error(f"Erro ao listar usuarios: {str(e)}", exc_info=True)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Erro interno ao listar usuarios: {str(e)}"
+            )
+        
+    @staticmethod
+    def get_user_by_id(db: Session, user_id: int) -> UserReadSchema:
+        try:
+            logger.info(f"Buscando usuario com id {user_id}...")
+            
+            user = db.query(User).filter(User.id == user_id).first()
+
+            if not user:
+                logger.warning(f"Usuario com id {user_id} nao encontrado.")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Usuario com ID {user_id} nao encontrado."
+                )
+            
+            logger.info(f"✅ Usuário encontrado: {user.name} ({user.email})")
+            return UserReadSchema.model_validate(user)
+        
+        except HTTPException as e:
+            raise
+        except Exception as e:
+            logger.error(f"Erro ao buscar usuario com ID {user_id}: {str(e)}", exc_info=True)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Erro interno ao buscar usuario: {str(e)}"
+            )
+
+
+    

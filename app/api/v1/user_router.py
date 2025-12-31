@@ -7,12 +7,30 @@ from app.services.user_service import UserService
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
-@router.post("/", response_model=UserReadSchema, status_code=201)
+# Cria novo usuario
+@router.post("/new", response_model=UserReadSchema, status_code=201)
 def create_user(data: UserCreateSchema, db: Session = Depends(get_db)):
     user = UserService.create_user(db, data)
     return user
 
+# Deleta usuario pelo ID
 @router.delete("/{user_id}", status_code=204)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     UserService.delete_user(db, user_id)
     return None
+
+# Lista todos os usuarios
+@router.get("/", response_model=list[UserReadSchema])
+def get_users(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    users = UserService.get_user(db, skip=skip, limit=limit)
+    return users
+
+# Lista o usuario pelo ID
+@router.get("/{user_id}", response_model=UserReadSchema)
+def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+    user = UserService.get_user_by_id(db, user_id)
+    return user
