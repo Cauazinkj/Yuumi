@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.schemas.user import UserCreateSchema, UserReadSchema
+from app.schemas.user import UserCreateSchema, UserReadSchema, UserUpdateSchema
 from app.services.user_service import UserService
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -34,3 +34,12 @@ def get_users(
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     user = UserService.get_user_by_id(db, user_id)
     return user
+
+@router.put("/{user_id}", response_model=UserReadSchema)
+def update_user(
+    user_id: int,
+    data: UserUpdateSchema,
+    db: Session = Depends(get_db)    
+):
+    update_user = UserService.update_user(db, user_id, data)
+    return update_user
