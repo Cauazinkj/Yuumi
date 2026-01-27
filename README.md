@@ -24,7 +24,7 @@ mkdir projeto
 cd projeto
 ```
 
-Criar ambiente virtual: 
+**Criar ambiente virtual:**
 
 ```
 python3 -m venv .venv
@@ -36,20 +36,20 @@ source /home/caua/Yuumi/backend/.venv/bin/activate
 
 ### Fluxo correto:
 
-Subir containers:
+**Subir containers:**
 
 ```
 docker-compose build
 docker-compose up -d
 ```
 
-Criar migration:
+**Criar migration:**
 
 ```
 docker-compose exec yuumi_backend alembic revision --autogenerate -m "create tables"
 ```
 
-Aplicar migration:
+**Aplicar migration:**
 
 ```
 docker-compose exec yuumi_backend alembic upgrade head
