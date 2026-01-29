@@ -55,6 +55,8 @@ docker-compose exec yuumi_backend alembic revision --autogenerate -m "create tab
 docker-compose exec yuumi_backend alembic upgrade head
 ```
 
+---
+
 Comandos importantes:
 
 ```
