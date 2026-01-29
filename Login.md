@@ -28,7 +28,7 @@ curl -X POST "http://localhost:8000/api/v1/users/new" \
 curl -X POST "http://localhost:8000/api/v1/auth/login" \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "chef@yummi.com",
+    "email": "email@teste.com",
     "password": "Senha@123"
   }'
 ```
@@ -41,7 +41,7 @@ curl -X POST "http://localhost:8000/api/v1/auth/login" \
 LOGIN_RESPONSE=$(curl -s -X POST "http://localhost:8000/api/v1/auth/login" \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "email@email.com",
+    "email": "email@teste.com",
     "password": "Senha@123"
   }')
 
