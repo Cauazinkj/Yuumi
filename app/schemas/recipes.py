@@ -19,6 +19,7 @@ class IngredientRead(IngredientBase):
 
 class StepBase(BaseModel):
     description: str = Field(..., min_length=1, max_length=500, description="Descricao do passo da receita")
+    step_number: int = Field(..., ge=1, description="Numero do passo")
 
 class StepCreate(StepBase):
     pass
@@ -33,23 +34,23 @@ class StepRead(StepBase):
 class RecipeBase(BaseModel):
     title: str = Field(..., min_length=1, max_length=100, description="Titulo da receita")
 
-    description: Optional[str] = Field(None, max_length=500, description="Descricao opcional da receita")
+    description: Optional[str] = Field(None, max_length=1000, description="Descricao opcional da receita")
 
 class RecipeCreate(RecipeBase):
     ingredients: List[IngredientCreate] = Field(
         ...,
         min_items=1,
-        description="Lista de ingredientes (pelo menos 1)"
+        description="Lista de ingredientes"
     )
     steps: List[StepCreate] = Field(
         ...,
         min_items=1,
-        description="Lista de passos da receita (pelo menos 1)"
+        description="Lista de passos da receita"
     )
 
 class RecipeUpdate(BaseModel):
     title: Optional[str] = Field(None, min_length=1, max_length=100)
-    description: Optional[str] = Field(None, max_length=500)
+    description: Optional[str] = Field(None, max_length=1000)
     ingredients: Optional[List[IngredientCreate]] = None
     steps: Optional[List[StepCreate]] = None
 
