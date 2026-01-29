@@ -112,4 +112,33 @@ class RecipeService:
                 detail=f"Erro ao listar receitas: {str(e)}"
             )
         
+    @staticmethod
+    def get_recipe_by_id(
+        db: Session,
+        recipe_id: int
+    ) -> RecipeRead:
+        
+        try:
+            logger.info(f"Buscando a receita de ID: {recipe_id}")
+
+            recipe = db.query(Recipe).filter(Recipe.id == recipe.id).first()
+
+            if not recipe:
+                logger.warning(f"Receita {recipe_id} nao encontrada")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Receita com ID {recipe_id} nao encontrada"
+                )
+            
+            logger.info(f"Receita encontrada: {recipe.title}")
+            return RecipeRead.model_validate(recipe)
+        
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Erro ao buscar receita: {str(e)}", exc_info=True)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Erro ao buscar receita: {str(e)}"
+            )
         
