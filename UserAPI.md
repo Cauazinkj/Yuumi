@@ -14,6 +14,21 @@ curl -X POST "http://localhost:8000/api/v1/users/new" \
   }'
 ```
 
+## API para ATUALIZAR um usuario
+
+* Pelo Terminal
+
+```bash
+curl -X PUT "http://localhost:8000/api/v1/users/1" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "name": "nome",
+    "email": "email@teste.com",
+    "password": "Nova@Senha123"
+  }'
+```
+
 ## API DELETAR usuario
 
 * Pelo Terminal

@@ -141,4 +141,114 @@ class RecipeService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Erro ao buscar receita: {str(e)}"
             )
+    
+    @staticmethod
+    def update_recipe(
+        db: Session,
+        recipe_id: int,
+        recipe_data: RecipeUpdate,
+        user_id: Optional[int] = None
+    ) -> RecipeRead:
+        try:
+            logger.info(f"Atualizando receita ID: {recipe_id}")
+
+            recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+
+            if not recipe:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Receita com ID {recipe_id} nao encontrada"
+                )
+            
+            if user_id and recipe.user_id != user_id:
+                logger.warning(f"Usuario {user_id} tentou editar receita de {recipe.user_id}")
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Voce nao tem permissao para editar essa receita"
+                )
+            
+            update_dict = recipe_data.model_dump(exclude_unset=True, exclude={'steps', 'ingredients'})
+
+            for field, value in update_dict.item():
+                setattr(recipe, field, value)
+                logger.debug(f"  Campo atualizado: {field} = {value}")
+
+            if recipe_data.steps is not None:
+                logger.info("  Atualizando passos...")
+
+                db.query(RecipeStep).filter(RecipeStep.recipe_id == recipe_id).delete()
+
+                sorted_steps = sorted(recipe_data.steps, key=lambda x: x.step_number)
+                for step_data in sorted_steps:
+                    step = RecipeStep(
+                        description=step_data.description,
+                        recipe_id=recipe_id
+                    )
+                    db.add(step)
+
+            if recipe_data.ingredients is not None:
+                logger.info("  Atualizando ingredientes...")
+                db.query(RecipeIngredient).filter(RecipeIngredient.recipe_id == recipe_id).delete()
+
+                for ingredient_data in recipe_data.ingredients:
+                    ingredient = RecipeIngredient(
+                        name=ingredient_data.name,
+                        quantity=ingredient_data.quantity,
+                        recipe_id=recipe_id
+                    )
+                    db.add(ingredient)
+
+            db.commit()
+            db.refresh(recipe)
+
+            logger.info(f" Receita {recipe_id} atualizada com sucesso")
+            return RecipeRead.model_validate(recipe)
         
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Erro ao atualizar receita: {str(e)}", exc_info=True)
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Erro ao atualizar receita: {str(e)}"
+            )
+    
+    @staticmethod
+    def delete_recipe(
+        db: Session,
+        recipe_id: int,
+        user_id: Optional[int] = None
+    ) -> None:
+        try:
+            logger.info(f"Deletando receita ID: {recipe_id}")
+
+            recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+
+            if not recipe:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Receita com ID {recipe_id} nao encontrado"
+                )
+
+            if user_id and recipe.user_id != user_id:
+                logger.warning(f"Usuario {user_id} tentou deletar recieta de {recipe.user_id}")
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Voce nao tem permissao para deletar esta receita"
+                )
+            
+            db.delete(recipe)
+            db.commit()
+
+            logger.info(f" Receita {recipe_id} deletada com sucesso")
+        
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Erro ao deletar receita: {str(e)}", exc_info=True)
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Erro ao deletar receita: {str(e)}"
+            )
