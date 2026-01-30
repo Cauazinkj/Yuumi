@@ -36,7 +36,7 @@ class RecipeService:
             db_recipe = Recipe(
                 title=recipe_data.title,
                 description=recipe_data.description,
-                user_id=recipe_data.user_id
+                user_id=user_id
             )
             db.add(db_recipe)
             db.flush()
@@ -50,20 +50,23 @@ class RecipeService:
                 db.add(ingredient)
                 logger.debug(f"  - Ingrediente {idx+1}: {ingredient_data.name}")
 
+            sorted_steps = sorted(recipe_data.steps, key=lambda x: x.step_number)
+
             for step_data in sorted_steps:
                 step = RecipeStep(
                     description=step_data.description,
+                    step_number=step_data.step_number,
                     recipe_id=db_recipe.id
                 )
                 db.add(step)
                 logger.debug(f"  - Passo {step_data.step_number}: {step_data.description[:30]}...")
 
-                db.commit()
-                db.refresh(db_recipe)
+            db.commit()
+            db.refresh(db_recipe)
 
-                logger.info(f"Receita criado com ID: {db_recipe.id}")
+            logger.info(f"Receita criado com ID: {db_recipe.id}")
 
-                return RecipeRead.model_validate(db_recipe)
+            return RecipeRead.model_validate(db_recipe)
         
         except HTTPException:
             raise

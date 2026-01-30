@@ -6,6 +6,7 @@ class RecipeStep(Base):
     __tablename__ = "recipe_steps"
 
     id = Column(Integer, primary_key=True)
+    step_number = Column(Integer, nullable=False)
     description = Column(String, nullable=False)
 
     recipe_id = Column(Integer, ForeignKey("recipes.id"))

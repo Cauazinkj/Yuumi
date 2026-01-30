@@ -28,7 +28,7 @@ def create_recipe(
         user_id=current_user.id
     )
 
-@router.get("/", responde_model=List[RecipeSummary])
+@router.get("/", response_model=List[RecipeSummary])
 def get_recipes(
     skip: int = Query(0, ge=0, description="Numero de itens para pular"),
     limit: int = Query(100, ge=1, le=1000, description="Limite de itens por pagina"),
@@ -46,7 +46,7 @@ def get_recipes(
         search=search
     )
 
-@router.get("/{recipe_id}", responde_model=RecipeRead)
+@router.get("/{recipe_id}", response_model=RecipeRead)
 def get_recipe(
     recipe_id: int,
     db: Session = Depends(get_db)

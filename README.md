@@ -4,6 +4,9 @@
 
 Um aplicativo de receitas, com intuito de me desenvolver e aprender sobre tecnologia. Quero criar boas praticas e me desenvolver como profissional
 
+*Swagger: http://localhost:8000/docs*
+*ReDoc: http://localhost:8000/redoc*
+
 ---
 
 ### Tecnologias: 
