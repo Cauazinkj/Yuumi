@@ -47,11 +47,11 @@ def get_recipes(
     )
 
 @router.get("/{recipe_id}", response_model=RecipeRead)
-def get_recipe(
+def get_recipe_by_id(
     recipe_id: int,
     db: Session = Depends(get_db)
 ):
-    logger.info(f"Requisicao GET /recipes/{recipes_id}")
+    logger.info(f"Requisicao GET /recipes/{recipe_id}")
 
     return RecipeService.get_recipe_by_id(db, recipe_id)
 

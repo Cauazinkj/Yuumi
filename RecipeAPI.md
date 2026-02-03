@@ -83,13 +83,6 @@ curl -X GET "http://localhost:8000/api/v1/recipes/?search=bolo"
 curl -X GET "http://localhost:8000/api/v1/recipes/?user_id=1"
 ```
 
-ou 
-
-```bash
-# Receitas do usuário com ID 1
-curl -X GET "http://localhost:8000/api/v1/recipes/?1"
-```
-
 ## API's de ATUALIZAR receitas
 
 ### Atualizar apenas o titulo

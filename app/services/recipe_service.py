@@ -84,7 +84,7 @@ class RecipeService:
         skip: int = 0,
         limit: int = 100,
         user_id: Optional[int] = None,
-        search: Optional[int] = None
+        search: Optional[str] = None
     ) -> List[RecipeSummary]:
         try: 
             logger.info(f"Listando receitas (skip={skip}, limit={limit})")
@@ -135,7 +135,7 @@ class RecipeService:
         try:
             logger.info(f"Buscando a receita de ID: {recipe_id}")
 
-            recipe = db.query(Recipe).filter(Recipe.id == recipe.id).first()
+            recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
 
             if not recipe:
                 logger.warning(f"Receita {recipe_id} nao encontrada")
