@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, or_, func
 from fastapi import HTTPException, status
 import logging
 from typing import List, Optional
@@ -91,18 +91,29 @@ class RecipeService:
 
             query = db.query(Recipe)
 
-            if user_id:
+            if user_id is not None:
                 query = query.filter(Recipe.user_id == user_id)
                 logger.debug(f"  Filtro: user_id={user_id}")
 
-            if search:
+            if search and search.strip():
+                search_term = search.strip()
+
+                search_pattern = f"%{search_term}%"
                 query = query.filter(
-                    Recipe.title.ilike(f"%{search}%") |
-                    Recipe.description.ilike(f"%{search}%")
+                    or_(
+                        # Busca no titulo
+                        func.unaccent(func.lower(Recipe.title)).ilike(
+                            func.unaccent(func.lower(search_pattern))
+                        ),
+                        # Busca na descricao
+                        func.unaccent(func.lower(Recipe.description)).ilike(
+                            func.unaccent(func.lower(search_pattern))
+                        )
+                    )
                 )
                 logger.debug(f"  Busca: '{search}'")
 
-            recipes = query.offset(skip).limit(limit).all()
+            recipes = query.order_by(Recipe.id.desc()).offset(skip).limit(limit).all()
 
             logger.info(f"Encontradas {len(recipes)} receita(s)")
 
@@ -172,7 +183,7 @@ class RecipeService:
             
             update_dict = recipe_data.model_dump(exclude_unset=True, exclude={'steps', 'ingredients'})
 
-            for field, value in update_dict.item():
+            for field, value in update_dict.items():
                 setattr(recipe, field, value)
                 logger.debug(f"  Campo atualizado: {field} = {value}")
 
@@ -185,6 +196,7 @@ class RecipeService:
                 for step_data in sorted_steps:
                     step = RecipeStep(
                         description=step_data.description,
+                        step_number=step_data.step_number,
                         recipe_id=recipe_id
                     )
                     db.add(step)

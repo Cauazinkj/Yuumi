@@ -6,19 +6,8 @@
 
 
 ## Autenticação
-Todas as rotas protegidas exigem token JWT no header:
-```http
-Authorization: Bearer <seu_token_jwt>
 
-Para obter token:
-
-POST /auth/login
-```bash
-{
-  "email": "usuario@email.com",
-  "password": "Senha@123"
-}
-```
+Todas as rotas protegidas exigem token JWT no header.
 
 # Endpoints de Receitas
 
@@ -79,6 +68,8 @@ curl -X GET "http://localhost:8000/api/v1/recipes/1" \
 
 ### Buscar receitas por termo
 
+*Atencao, pelo terminal nao utilize acentos, pode escrever a palavra, mas ignore a acentuacao*
+
 ```bash
 # Busca por "bolo"
 curl -X GET "http://localhost:8000/api/v1/recipes/?search=bolo"
@@ -90,6 +81,13 @@ curl -X GET "http://localhost:8000/api/v1/recipes/?search=bolo"
 ```bash
 # Receitas do usuário com ID 1
 curl -X GET "http://localhost:8000/api/v1/recipes/?user_id=1"
+```
+
+ou 
+
+```bash
+# Receitas do usuário com ID 1
+curl -X GET "http://localhost:8000/api/v1/recipes/?1"
 ```
 
 ## API's de ATUALIZAR receitas
@@ -131,7 +129,7 @@ curl -X PUT "http://localhost:8000/api/v1/recipes/$RECIPE_ID" \
       {"name": "Óleo", "quantity": "1 xícara"},
       {"name": "Farinha de trigo", "quantity": "3 xícaras"},
       {"name": "Fermento em pó", "quantity": "1 colher de sopa"},
-      {"name": "Canela em pó", "quantity": "1 colher de chá"}  # NOVO INGREDIENTE
+      {"name": "Canela em pó", "quantity": "1 colher de chá"}
     ]
   }'
 ```
@@ -143,3 +141,5 @@ curl -X DELETE "http://localhost:8000/api/v1/recipes/{recipe_id}" \
   -H "Authorization: Bearer $TOKEN" \
   -w "\nStatus: %{http_code}\n"
 ```
+
+*Testei e funcionou*

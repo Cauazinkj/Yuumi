@@ -3,6 +3,7 @@ services:
   yuumi_db:
     image: postgres:15
     container_name: yuumi_db
+    command: ["postgres", "-c", "shared_preload_libraries=unaccent"]
     restart: always
     environment:
       POSTGRES_USER: postgres
