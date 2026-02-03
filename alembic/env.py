@@ -46,12 +46,14 @@ try:
     from app.models.recipes import Recipe
     from app.models.recipe_steps import RecipeStep
     from app.models.recipe_ingredient import RecipeIngredient
+    from app.models.review import Review
     
     print("Modelos importados com sucesso:")
     print(f"- User: {'✓' if 'users' in Base.metadata.tables else '✗'}")
     print(f"- Recipe: {'✓' if 'recipes' in Base.metadata.tables else '✗'}")
     print(f"- RecipeStep: {'✓' if 'recipe_steps' in Base.metadata.tables else '✗'}")
     print(f"- RecipeIngredient: {'✓' if 'recipe_ingredients' in Base.metadata.tables else '✗'}")
+    print(f"- Review: {'✓' if 'reviews' in Base.metadata.tables else '✗'}")
     
     target_metadata = Base.metadata
     print("Metadata configurada com sucesso")

@@ -11,3 +11,9 @@ class User(Base):
     password_hash = Column(String, nullable=False)
 
     recipes = relationship("Recipe", back_populates="user")
+
+    reviews = relationship(
+        "Review",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
