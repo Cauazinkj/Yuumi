@@ -15,7 +15,7 @@ curl -X POST "http://localhost:8000/api/v1/users/new" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "nome",
-    "email": "email@email.com", 
+    "email": "email@teste.com", 
     "password": "Senha@123"
   }'
 ```

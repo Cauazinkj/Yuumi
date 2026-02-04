@@ -10,10 +10,14 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
 
-    recipes = relationship("Recipe", back_populates="user")
+    recipes = relationship(
+        "Recipe", 
+        back_populates="user"
+    )
 
     reviews = relationship(
         "Review",
         back_populates="user",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        lazy="select"
     )

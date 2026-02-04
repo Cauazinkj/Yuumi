@@ -23,7 +23,7 @@ class Review(Base):
     comment = Column(Text, nullable=True)
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    update_at = Column(DateTime(timezone=True), onupdate=func.now)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     recipe = relationship("Recipe", back_populates="reviews")
     user = relationship("User", back_populates="reviews")

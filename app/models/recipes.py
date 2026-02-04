@@ -18,7 +18,7 @@ class Recipe(Base):
         "Review",
         back_populates="recipe",
         cascade="all, delete-orphan",
-        lazy="joined"
+        lazy="select"
     )
 
     @property
