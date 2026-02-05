@@ -36,11 +36,13 @@ O projeto está sendo desenvolvido com foco em **boas práticas**, **arquitetura
 
 Documentação detalhada por módulo:
 
+```
 documentacao/
 ├── Login.md
 ├── RecipeAPI.md
 ├── ReviewAPI.md
 └── UserAPI.md
+```
 
 ---
 
@@ -65,6 +67,7 @@ documentacao/
 
 ## Estrutura do Projeto
 
+```
 yuumi/
 ├── backend/
 │ ├── app/
@@ -76,6 +79,7 @@ yuumi/
 ├── frontend/ # em desenvolvimento
 │
 └── README.md
+```
 
 ---
 
