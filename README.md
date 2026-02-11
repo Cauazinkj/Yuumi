@@ -71,12 +71,22 @@ documentacao/
 yuumi/
 ├── backend/
 │ ├── app/
+│ │ ├── api/ 
+│ │ ├── core/
+│ │ ├── db/
+│ │ ├── models/
+│ │ ├── schemas/
+│ │ ├── service/
+│ │ ├── main.py
 │ ├── alembic/
+│ ├── documentacao/
 │ ├── Dockerfile
 │ ├── docker-compose.yml
 │ └── requirements.txt
 │
 ├── frontend/ # em desenvolvimento
+│ ├── node_modules/
+│ ├── src/
 │
 └── README.md
 ```
