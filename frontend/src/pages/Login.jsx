@@ -39,7 +39,7 @@ const Login = () => {
             newErrors.email = 'Email inválido';
         }
 
-        return newErros;
+        return newErrors;
     };
 
     const handleSubmit = async (e) => {

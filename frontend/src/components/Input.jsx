@@ -8,7 +8,8 @@ const Input = ({
     onChange,
     placeholder,
     error,
-    required = false
+    required = false,
+    disabled = false
 }) => {
     return (
         <div style={styles.container}>
@@ -26,9 +27,11 @@ const Input = ({
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
+                disabled={disabled}
                 style={{
                     ...styles.input,
-                    ...(error ? styles.inputError : {})
+                    ...(error ? styles.inputError : {}),
+                    ...(disabled ? styles.inputDisabled : {})
                 }}
             />
 
