@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../components/Input';
+import Alert from '../components/Alert';
+import authService from '../services/authService';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,6 +16,13 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   
+  // Estado para o alerta
+  const [alert, setAlert] = useState({
+    show: false,
+    message: '',
+    type: 'error'
+  });
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -26,6 +35,11 @@ const Register = () => {
         ...errors,
         [name]: ''
       });
+    }
+    
+    // Fecha alerta quando começa a digitar
+    if (alert.show) {
+      setAlert({ ...alert, show: false });
     }
   };
   
@@ -61,27 +75,47 @@ const Register = () => {
     }
     
     setLoading(true);
+    setAlert({ ...alert, show: false });
     
     try {
       console.log('Registrando:', formData);
       
-      // Simula sucesso
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await authService.register(formData);
       
-      // Redireciona para login
-      navigate('/login');
+      navigate('/');
       
     } catch (error) {
-      alert('Erro ao cadastrar: ' + error.message);
+      toast.error('Erro ao criar conta. Tente novamente.');
+      
+      setAlert({
+        show: true,
+        message: errorMessage,
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
+  };
+  
+  const closeAlert = () => {
+    setAlert({ ...alert, show: false });
   };
   
   return (
     <div style={styles.container}>
       <div style={styles.card}>
         <h1 style={styles.title}>Criar Conta</h1>
+        
+        {/* ALERTA DE ERRO */}
+        {alert.show && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClose={closeAlert}
+            autoClose={true}
+            duration={4000}
+          />
+        )}
         
         <form onSubmit={handleSubmit} style={styles.form}>
           <Input
@@ -90,9 +124,10 @@ const Register = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Seu nome"
+            placeholder="Seu nome completo"
             error={errors.name}
             required
+            disabled={loading}
           />
           
           <Input
@@ -104,6 +139,7 @@ const Register = () => {
             placeholder="seu@email.com"
             error={errors.email}
             required
+            disabled={loading}
           />
           
           <Input
@@ -115,6 +151,7 @@ const Register = () => {
             placeholder="••••••••"
             error={errors.password}
             required
+            disabled={loading}
           />
           
           <button 

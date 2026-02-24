@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Input from '../components/Input';
+import authService from '../services/authService';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -11,34 +13,19 @@ const Login = () => {
     });
 
     const [errors, setErrors] = useState({});
-
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: ''
-            });
-        }
+        setFormData({ ...formData, [name]: value });
+        if (errors[name]) setErrors({ ...errors, [name]: '' });
     };
 
     const validate = () => {
         const newErrors = {};
-
-        if (!formData.email) {
-            newErrors.email = 'Email é obrigatório';
-        } else if (!formData.email.includes('@')) {
-            newErrors.email = 'Email inválido';
-        }
-
+        if (!formData.email) newErrors.email = 'Email é obrigatório';
+        else if (!formData.email.includes('@')) newErrors.email = 'Email inválido';
+        if (!formData.password) newErrors.password = 'Senha é obrigatória';
         return newErrors;
     };
 
@@ -54,21 +41,10 @@ const Login = () => {
         setLoading(true);
 
         try {
-            console.log('Tentando Login com: ', formData);
-            
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            localStorage.setItem('token', 'fake-jwt-token');
-            localStorage.setItem('user', JSON.stringify({
-                id: 1,
-                name: 'Usuario teste',
-                email: formData.email
-            }));
-
+            await authService.login(formData.email, formData.password);
             navigate('/');
-
         } catch (error) {
-            alert('Erro ao fazer login: ' + error.message);
+            toast.error('Email ou senha inválidos');
         } finally {
             setLoading(false);
         }
@@ -78,7 +54,6 @@ const Login = () => {
         <div style={styles.container}>
             <div style={styles.card}>
                 <h1 style={styles.title}>Entrar na Conta</h1>
-
                 <form onSubmit={handleSubmit} style={styles.form}>
                     <Input
                         label="Email"
@@ -89,8 +64,8 @@ const Login = () => {
                         placeholder="seu@email.com"
                         error={errors.email}
                         required
+                        disabled={loading}
                     />
-
                     <Input
                         label="Senha"
                         type="password"
@@ -100,39 +75,20 @@ const Login = () => {
                         placeholder="********"
                         error={errors.password}
                         required
+                        disabled={loading}
                     />
-
-                    <button
-                        type="submit"
-                        disable={loading}
-                        style={{
-                            ...styles.button,
-                            ...(loading ? styles.buttonDisable : {})
-                        }}
-                    >
+                    <button type="submit" disabled={loading} style={styles.button}>
                         {loading ? 'Entrando...' : 'Entrar'}
                     </button>
                 </form>
-
                 <div style={styles.footer}>
                     <span style={styles.footerText}>
-                        Não tem uma conta?{' '}
-                        <Link to="/register" style={styles.link}>
-                            Cadastre-se
-                        </Link>
+                        Não tem uma conta? <Link to="/register" style={styles.link}>Cadastre-se</Link>
                     </span>
-                </div>
-
-                {/* Informações para teste */}
-                <div style={styles.testInfo}>
-                    <p style={styles.testTitle}>Para testar:</p>
-                    <p>Email: <strong>teste@review.com</strong></p>
-                    <p>Senha: <strong>Senha@123</strong></p>
                 </div>
             </div>
         </div>
     );
-
 };
 
 const styles = {
@@ -155,11 +111,11 @@ const styles = {
     title: {
         fontSize: '1.875rem',
         fontWeight: 'bold',
-        color: '#lf2937',
+        color: '#1f2937',
         marginBottom: '1.5rem',
         textAlign: 'center'
     },
-    form: {
+    formContainer: {
         marginBottom: '1.5rem'
     },
     button: {
@@ -176,8 +132,8 @@ const styles = {
         marginTop: '0.5rem'
     },
     buttonDisabled: {
-    opacity: 0.7,
-    cursor: 'not-allowed'
+        opacity: 0.7,
+        cursor: 'not-allowed'
     },
     footer: {
         textAlign: 'center',
@@ -192,19 +148,7 @@ const styles = {
         color: '#3b82f6',
         textDecoration: 'none',
         fontWeight: '600'
-    },
-    testInfo: {
-        marginTop: '1.5rem',
-        padding: '1rem',
-        backgroundColor: '#dbeafe',
-        borderRadius: '0.5rem',
-        fontSize: '0.875rem',
-        color: '#1e40af'
-    },
-    testTitle: {
-        fontWeight: 'bold',
-        marginBottom: '0.5rem'
     }
 };
 
-export default Login
+export default Login;

@@ -9,6 +9,8 @@ class AuthService {
                 password
             });
 
+            console.log('Resposta do backend:', response.data);
+
             if (response.data.token?.access_token) {
                 localStorage.setItem('token', response.data.token.access_token);
                 
@@ -25,6 +27,8 @@ class AuthService {
             throw new Error('Resposta invalida do servidor');
 
         } catch (error) {
+            console.error('Erro no login:', error)
+
             if (error.response?.data?.detail) {
                 throw new Error(error.response.data.detail);
             }
@@ -37,11 +41,15 @@ class AuthService {
         try {
             const response = await api.post('/users/new', userData);
 
+            console.log('Resposta do registro:', response.data);
+
             if (response.data) {
                 return await this.login(userData.email, userData.password);
             }
-            
+
         } catch (error) {
+            console.error('Erro no registro:', error);
+            
             if (error.response?.data?.detail) {
                 throw new Error(error.response.data.detail);
             }

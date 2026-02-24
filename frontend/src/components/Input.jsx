@@ -6,6 +6,7 @@ const Input = ({
     name,
     value,
     onChange,
+    onKeyPress, 
     placeholder,
     error,
     required = false,
@@ -26,6 +27,7 @@ const Input = ({
                 name={name}
                 value={value}
                 onChange={onChange}
+                onKeyPress={onKeyPress}
                 placeholder={placeholder}
                 disabled={disabled}
                 style={{
@@ -69,6 +71,11 @@ const styles = {
         borderColor: '#ef4444',
         backgroundColor: '#fef2f2'
     },
+    inputDisabled: {
+        backgroundColor: '#f3f4f6',
+        cursor: 'not-allowed',
+        opacity: 0.7
+    },
     errorText: {
         marginTop: '0.25rem',
         fontSize: '0.875rem',
@@ -76,4 +83,4 @@ const styles = {
     }
 };
 
-export default Input
+export default Input;
