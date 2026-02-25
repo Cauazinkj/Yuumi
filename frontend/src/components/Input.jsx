@@ -6,12 +6,43 @@ const Input = ({
     name,
     value,
     onChange,
-    onKeyPress, 
+    onKeyPress,
     placeholder,
     error,
     required = false,
     disabled = false
 }) => {
+
+    const baseStyle = {
+        width: '100%',
+        padding: '0.75rem',
+        borderRadius: '0.375rem',
+        fontSize: '1rem',
+        outline: 'none',
+        transition: 'border-color 0.2s, background-color 0.2s'
+    };
+
+    const getBorderStyle = () => {
+        if (error) {
+            return {
+                border: '1px solid #ef4444',
+                backgroundColor: '#fef2f2'
+            };
+        }
+        if (disabled) {
+            return {
+                border: '1px solid #d1d5db',
+                backgroundColor: '#f3f4f6',
+                cursor: 'not-allowed',
+                opacity: 0.7
+            };
+        }
+        return {
+            border: '1px solid #d1d5db',
+            backgroundColor: 'white'
+        };
+    };
+
     return (
         <div style={styles.container}>
             {label && (
@@ -31,9 +62,8 @@ const Input = ({
                 placeholder={placeholder}
                 disabled={disabled}
                 style={{
-                    ...styles.input,
-                    ...(error ? styles.inputError : {}),
-                    ...(disabled ? styles.inputDisabled : {})
+                    ...baseStyle,
+                    ...getBorderStyle()
                 }}
             />
 
@@ -57,24 +87,6 @@ const styles = {
     },
     required: {
         color: '#ef4444'
-    },
-    input: {
-        width: '100%',
-        padding: '0.75rem',
-        border: '1px solid #d1d5db',
-        borderRadius: '0.375rem',
-        fontSize: '1rem',
-        outline: 'none',
-        transition: 'border-color 0.2s'
-    },
-    inputError: {
-        borderColor: '#ef4444',
-        backgroundColor: '#fef2f2'
-    },
-    inputDisabled: {
-        backgroundColor: '#f3f4f6',
-        cursor: 'not-allowed',
-        opacity: 0.7
     },
     errorText: {
         marginTop: '0.25rem',
