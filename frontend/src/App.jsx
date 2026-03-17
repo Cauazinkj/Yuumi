@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import CreateRecipe from './pages/CreateRecipe';
 import RecipesList from './pages/RecipesList';
+import RecipeDetail from './pages/RecipeDetail';
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/recipes/new" element={<CreateRecipe />} />
-        <Route path="/recipes" element={<RecipesList/>} />
+        <Route path="/recipes" element={<RecipesList />} />
+        <Route path="/recipes/:id" element={<RecipeDetail />} />
       </Routes>
     </BrowserRouter>
   );
