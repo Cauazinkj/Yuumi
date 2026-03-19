@@ -8,6 +8,8 @@ import Home from './pages/Home';
 import CreateRecipe from './pages/CreateRecipe';
 import RecipesList from './pages/RecipesList';
 import RecipeDetail from './pages/RecipeDetail';
+import EditRecipe from './pages/EditRecipe';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/recipes/new" element={<CreateRecipe />} />
         <Route path="/recipes" element={<RecipesList />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
+        <Route path="/recipes/:id/edit" element={<EditRecipe />} />
+        <Route path="/profile" element={<Profile /> } />
       </Routes>
     </BrowserRouter>
   );

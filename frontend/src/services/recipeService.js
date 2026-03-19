@@ -43,7 +43,7 @@ class RecipeService {
 
     async updateRecipe(id, recipeData) {
         try {
-            const response = await api.put(`/recipes/${id}`);
+            const response = await api.put(`/recipes/${id}`, recipeData);
             return response.data;
         } catch (error) {
             console.error('Erro ao atualizar:', error.response?.data);

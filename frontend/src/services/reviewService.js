@@ -74,6 +74,19 @@ class ReviewService {
             };
         }
     }
+
+    async getUserReviews(userId) {
+        try {
+            // Se a API tiver um endpoint para buscar reviews por usuário
+            // Ajuste conforme sua API
+            const response = await api.get(`/review/user/me`);
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao buscar avaliações do usuário:', error);
+            return [];
+        }
+    }
+
 }
 
 export default new ReviewService();

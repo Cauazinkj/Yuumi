@@ -17,7 +17,7 @@ const RecipeDetail = () => {
     const [reviews, setReviews] = useState([]);
     const [stats, setStats] = useState({ average_rating: null, review_count: 0 });
     const [myReview, setMyReview] = useState(null);
-    const [showReviewForm, setShowReviewForm] = useState(false);  // ← CORRIGIDO
+    const [showReviewForm, setShowReviewForm] = useState(false);
     const [editingReview, setEditingReview] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');

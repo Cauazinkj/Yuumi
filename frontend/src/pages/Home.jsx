@@ -71,6 +71,14 @@ const Home = () => {
               Nova Receita
             </button>
             
+            <button
+              onClick={() => navigate('/profile')}
+              style={styles.menuButton}
+            >
+              <span style={styles.menuButton}>👤</span>
+              Meu Perfil
+            </button>
+
             <button 
               onClick={handleLogout}
               style={styles.logoutButton}
