@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
-import authService from '../services/authService';
+import userService from '../services/userService';
 
 const ReviewCard = ({ review, onEdit, onDelete }) => {
-    const currentUser = authService.getCurrentUser();
+    const [authorName, setAuthorName] = useState(review.user_username || `Usuário ${review.user_id}`);
+    const [loading, setLoading] = useState(!review.user_username);
+
+    useEffect(() => {
+        // Se já veio com username, não precisa buscar
+        if (review.user_username) {
+            setAuthorName(review.user_username);
+            setLoading(false);
+            return;
+        }
+
+        // Busca o nome do usuário
+        const loadAuthor = async () => {
+            try {
+                const user = await userService.getUserById(review.user_id);
+                if (user && user.name) {
+                    setAuthorName(user.name);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar autor:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadAuthor();
+    }, [review.user_id, review.user_username]);
+
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
     const isOwner = currentUser && currentUser.id === review.user_id;
 
     const formatDate = (dateString) => {
+        if (!dateString) return 'Data desconhecida';
         const date = new Date(dateString);
         return date.toLocaleDateString('pt-BR', {
             day: '2-digit',
@@ -22,7 +51,7 @@ const ReviewCard = ({ review, onEdit, onDelete }) => {
                     <span style={styles.userAvatar}>👤</span>
                     <div>
                         <p style={styles.userName}>
-                            {review.user_username || `Usuário ${review.user_id}`}
+                            {loading ? 'Carregando...' : authorName}
                         </p>
                         <p style={styles.reviewDate}>
                             {formatDate(review.created_at)}

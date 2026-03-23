@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import recipeService from '../services/recipeService';
 import userService from '../services/userService';
 import Alert from '../components/Alert';
@@ -9,6 +9,8 @@ const RecipesList = () => {
     const [usersMap, setUsersMap] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [searchParams] = useSearchParams();
+    const searchQuery = searchParams.get('search') || '';
 
     useEffect(() => {
         loadRecipes();

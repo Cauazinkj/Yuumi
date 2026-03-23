@@ -10,6 +10,8 @@ import RecipesList from './pages/RecipesList';
 import RecipeDetail from './pages/RecipeDetail';
 import EditRecipe from './pages/EditRecipe';
 import Profile from './pages/Profile';
+import MyReviews from './pages/MyReviews';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
       }}
     >
       <ToastContainer position="top-right" autoClose={4000} />
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -28,7 +31,8 @@ function App() {
         <Route path="/recipes" element={<RecipesList />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
         <Route path="/recipes/:id/edit" element={<EditRecipe />} />
-        <Route path="/profile" element={<Profile /> } />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/my-reviews" element={<MyReviews/>} />
       </Routes>
     </BrowserRouter>
   );
