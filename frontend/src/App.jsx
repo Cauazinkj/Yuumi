@@ -2,16 +2,14 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import CreateRecipe from './pages/CreateRecipe';
 import RecipesList from './pages/RecipesList';
 import RecipeDetail from './pages/RecipeDetail';
-import EditRecipe from './pages/EditRecipe';
 import Profile from './pages/Profile';
-import MyReviews from './pages/MyReviews';
-import Navbar from './components/Navbar';
 
 function App() {
   return (
@@ -22,17 +20,15 @@ function App() {
       }}
     >
       <ToastContainer position="top-right" autoClose={4000} />
-      <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/recipes/new" element={<CreateRecipe />} />
         <Route path="/recipes" element={<RecipesList />} />
+        <Route path="/recipes/new" element={<CreateRecipe />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />
-        <Route path="/recipes/:id/edit" element={<EditRecipe />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/my-reviews" element={<MyReviews/>} />
       </Routes>
     </BrowserRouter>
   );

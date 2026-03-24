@@ -314,7 +314,7 @@ const RecipeDetail = () => {
             </div>
         </div>
     );
-}; 
+};
 
 const styles = {
     container: {

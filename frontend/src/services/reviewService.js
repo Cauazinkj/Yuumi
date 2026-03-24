@@ -87,6 +87,16 @@ class ReviewService {
         }
     }
 
+    async getMyReviews() {
+        try {
+            const response = await api.get('/review/user/me');
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao buscar minhas reviews:', error);
+            return [];
+        }
+    }
+
 }
 
 export default new ReviewService();

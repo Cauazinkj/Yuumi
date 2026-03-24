@@ -21,8 +21,15 @@ class RecipeService {
 
     async getRecipes(params = {}) {
         try {
-            const response = await api.get('/recipes', { params });
-            return response.data
+            const response = await api.get('/recipes', { 
+                params: {
+                    skip: params.skip || 0,
+                    limit: params.limit || 10,
+                    user_id: params.user_id,
+                    search: params.search
+                }
+            });
+            return response.data;
         } catch (error) {
             console.error('Erro ao buscar receitas:', error);
             throw error;
